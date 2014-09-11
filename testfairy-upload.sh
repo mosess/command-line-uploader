@@ -27,6 +27,12 @@ ICON_WATERMARK="on"
 # Comment text will be included in the email sent to testers
 COMMENT="$TESTFAIRY_COMMENT"
 
+# The file to analyze proguard results
+PROGUARD_FILE="$TESTFAIRY_PROGUARD_FILE"
+
+# Comma-separated list of metrics to record
+METRICS="cpu, memory, network, phone-signal, logcat, gps, battery"
+
 # Your Keystore, Storepass and Alias, the ones you use to sign your app.
 KEYSTORE=
 STOREPASS=
@@ -49,6 +55,7 @@ usage() {
     echo TESTFAIRY_AUTO_UPDATE=$TESTFAIRY_AUTO_UPDATE
     echo TESTFAIRY_COMMENT=$TESTFAIRY_COMMENT
     echo TESTFAIRY_APK_FILENAME=$TESTFAIRY_APK_FILENAME
+    echo TESTFAIRY_PROGUARD_FILE=$TESTFAIRY_PROGUARD_FILE
     echo "--------------------------------------------------------"
     echo
 }
@@ -101,7 +108,16 @@ fi
 
 # Upload to testfairy
 /bin/echo -n "Uploading ${TESTFAIRY_APK_FILENAME} to TestFairy.. "
-JSON=$( ${CURL} -s ${SERVER_ENDPOINT}/api/upload -F api_key=${TESTFAIRY_API_KEY} -F apk_file=@${TESTFAIRY_APK_FILENAME} -F icon-watermark="${ICON_WATERMARK}" -F video="${VIDEO}" -F max-duration="${MAX_DURATION}" -F comment="${COMMENT}" -A "TestFairy Command Line Uploader ${UPLOADER_VERSION}" )
+JSON=$( ${CURL} -s ${SERVER_ENDPOINT}/api/upload
+    -F api_key=${TESTFAIRY_API_KEY}
+    -F apk_file=@${TESTFAIRY_APK_FILENAME}
+    -F icon-watermark="${ICON_WATERMARK}"
+    -F video="${VIDEO}"
+    -F max-duration="${MAX_DURATION}"
+    -F comment="${COMMENT}"
+    -F symbols_file="${PROGUARD_FILE}"
+    -F metrics="${METRICS}"
+    -A "TestFairy Command Line Uploader ${UPLOADER_VERSION}")
 
 URL=$( echo ${JSON} | sed 's/\\\//\//g' | sed -n 's/.*"instrumented_url"\s*:\s*"\([^"]*\)".*/\1/p' )
 if [ -z "${URL}" ]; then
