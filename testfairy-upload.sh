@@ -117,6 +117,7 @@ JSON=$( ${CURL} -s ${SERVER_ENDPOINT}/api/upload \
 -F comment="${COMMENT}" \
 -F symbols_file="${PROGUARD_FILE}" \
 -F metrics="${METRICS}" \
+-F options='video-only-wifi,no-tos' \
 -A "TestFairy Command Line Uploader ${UPLOADER_VERSION}")
 
 echo
