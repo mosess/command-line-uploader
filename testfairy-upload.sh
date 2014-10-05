@@ -16,13 +16,13 @@ NOTIFY="off"
 AUTO_UPDATE="$TESTFAIRY_AUTO_UPDATE"
 
 # The maximum recording duration for every test.
-MAX_DURATION="30m"
+MAX_DURATION="1h"
 
 # Is video recording enabled for this build
 VIDEO="on"
 
 # Add a TestFairy watermark to the application icon?
-ICON_WATERMARK="on"
+ICON_WATERMARK="off"
 
 # Comment text will be included in the email sent to testers
 COMMENT="$TESTFAIRY_COMMENT"
@@ -31,7 +31,8 @@ COMMENT="$TESTFAIRY_COMMENT"
 PROGUARD_FILE="$TESTFAIRY_PROGUARD_FILE"
 
 # Comma-separated list of metrics to record
-METRICS="cpu,memory,network,phone-signal,logcat,gps,battery"
+#METRICS="cpu,memory,network,phone-signal,logcat,gps,battery"
+METRICS="cpu,memory,network,phone-signal,logcat,battery"
 
 # Your Keystore, Storepass and Alias, the ones you use to sign your app.
 KEYSTORE=
@@ -117,7 +118,7 @@ JSON=$( ${CURL} -s ${SERVER_ENDPOINT}/api/upload \
 -F comment="${COMMENT}" \
 -F symbols_file="${PROGUARD_FILE}" \
 -F metrics="${METRICS}" \
--F options='video-only-wifi,no-tos' \
+-F options="video-only-wifi,no-tos" \
 -A "TestFairy Command Line Uploader ${UPLOADER_VERSION}")
 
 echo
